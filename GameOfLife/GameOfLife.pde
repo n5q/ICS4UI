@@ -1,54 +1,77 @@
-boolean[][] cells;
-//THIS VERSION ANIMATES
+boolean[][] cells; 
+int[][] init = 
+{
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0}
+};
 
-int n = 69;
+boolean[][] next;
+
+int n = 25;
 float cellSize;
-float padding = 50;
-int blinksPerSecond = 2; //used in the call to frameRate() inside setup()
+float padding = 5;
+int blinksPerSecond = 2;
 
 void setup()
 {
-  size(1000,1000);
+  size(800,800);
   cellSize = (width-2*padding)/n;
-  cells = new boolean[n][n];
-  setCellValuesRandomly();
+  cells = int2bool(init);
+  next = new boolean[n][n];
   frameRate( blinksPerSecond );
-  //NOTICE WE'VE LEFT OUT THE noLoop() COMMAND, SO draw() WILL BE CALLED REPEATEDLY. WE WANT THIS BECAUSE THIS IS AN ANIMATION, NOT JUST A SINGLE PICTURE
+  // setCellValuesRandomly();
 }
+
+
 void draw()
 {  
-  background(255,255,0);
-  // float y = height/2;
-  
-  for(int i = 0; i < n; i++)
-  {
+  background(0,0,0);
+  for(int i = 0; i < n; i++) {
     float y = padding + i*cellSize;
-    for (int j = 0; j < n; j++)
-    {
+
+    for (int j = 0; j < n; j++) {
       float x = padding + j*cellSize;
-      
-      if ( cells[i][j] )
-        fill(255);
-        
+
+      if (cells[i][j]) 
+        fill(225,225,30);
       else
-        fill(0);
-        
+        fill(255);  
       rect(x, y, cellSize, cellSize);
     }
   }
-  
-  setCellValuesRandomly(); //RESETS THE CELL VALUES RANDOMLY AFTER EACH FRAME, CREATING A BLINKING EFFECT.
+  nextGen();
+  // setCellValuesRandomly();
 }
 
 
 void setCellValuesRandomly()
 {
-  for(int i=0; i<n; i++)
-  {
-    for (int j = 0; j < n; j++)
-    {
-      int x = round(random(0,1));
-      println(x);
+  for(int i=0; i<n; i++) {
+    for (int j = 0; j < n; j++) {
+      int x = round(random(0,5));
       if (x == 0)
         cells[i][j] = false;
         
@@ -58,4 +81,58 @@ void setCellValuesRandomly()
   }
 }
 
- 
+
+void nextGen()
+{
+	for (int row = 0; row < n; row++) {
+		for (int col = 0; col < n; col++) {
+			int neighbours = livingNeighbors(row, col);
+
+			if (cells[row][col])
+				if (neighbours == 2 || neighbours == 3)
+					next[row][col] = true;
+				else
+					next[row][col] = false;
+			else
+				if (neighbours == 3)
+					next[row][col] = true;
+				else
+					next[row][col] = false;
+		}
+	}
+
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++) {
+			cells[i][j] = next[i][j];
+		}
+	}
+}
+
+int livingNeighbors(int i, int j)
+{
+	int count = 0;
+	for (int a = -1; a < 2; a++) {
+		for (int b = -1; b < 2; b++) {
+				try {
+					if (cells[i + a][j + b] && (a!=0 || b!=0))
+						count++;
+				}
+				catch (ArrayIndexOutOfBoundsException e){}
+		}
+	}
+	return count;
+}
+
+boolean[][] int2bool(int[][] arr) 
+{
+	boolean[][] converted = new boolean[n][n];
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++) {
+			if (arr[i][j] == 1)
+				converted[i][j] = true;
+			else
+				converted[i][j] = false;
+		}
+	}
+	return converted;
+}
