@@ -80,7 +80,7 @@ void init()
 // 			if (cells[row][col])
 // 				if (neighbours == 2 || neighbours == 3)
 // 					next[row][col] = true;
-// 				else
+// 				elseneighbours
 // 					next[row][col] = false;
 // 			else
 // 				if (neighbours == 3)
