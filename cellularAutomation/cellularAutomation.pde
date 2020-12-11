@@ -1,7 +1,7 @@
 
 
 // CONSTANTS
-final int n = 25;
+final int n = 50;
 final int padding = 0;
 final int fps = 2;
 final float percentFish = 0.05;
@@ -27,17 +27,21 @@ void setup()
 
 void draw()
 {  
-  background(0,0,0);
-  for(int i = 0; i < n; i++) {
-    float y = padding + i*cellSize;
+	background(0,0,0);
+	for(int i = 0; i < n; i++) {
+		float y = padding + i*cellSize;
 
-    for (int j = 0; j < n; j++) {
-      float x = padding + j*cellSize;
+		for (int j = 0; j < n; j++) {
+			float x = padding + j*cellSize;
 
-      if (cells[i][j] == 'W') 
-        fill(75,75,255);
-      else
-        fill(210,180,140);  
+			if (cells[i][j] == 'W') 
+	        	fill(75,75,255);
+
+	        else if (cells[i][j] == 'F')
+	        	fill(255,120,150);
+
+			else
+	        	fill(210,180,140);  
       rect(x, y, cellSize, cellSize);
     }
   }
@@ -53,12 +57,16 @@ void init()
 				cells[row][col] = 'L';
 			else
 				cells[row][col] = 'W';
-		}
+		}		
+	}
 
-		for (int col = 0; col < n-1; col++) {
-
-		}
-		
+	while (numFish > 0) {
+		int row = round(random(0,n-1));
+		int col = round(random(0,n-2));
+		println(row,col);
+		if (cells[row][col] == 'W')
+			cells[row][col] = 'F';
+			numFish--;
 	}
 }
 
