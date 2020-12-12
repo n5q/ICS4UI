@@ -1,8 +1,8 @@
 // CONSTANTS
-int n = 25;
+int n = 50;
 int padding = 0;
 int fps = 2;
-float percentFish = 0.05;
+float percentFish = 0.025;
 
 //DO NOT MODIFY
 int numFish = round(n*(n-1)*percentFish);
@@ -10,12 +10,12 @@ int counter = 0;
 float cellSize;
 int[][] cells; 
 int[][] next;
+int[][] clean;
 
 
 ///////////////////////////////////////////////////////////
 // BOOL ISGREEN[], ISGREENNEXT[], ISPINK[], ISPINKNEXT[] //
 ///////////////////////////////////////////////////////////
-
 
 
 
@@ -35,6 +35,7 @@ void setup()
 	cellSize = (width-2*padding)/n;
 	cells = new int[n][n];
 	next = new int[n][n];
+	clean = new int[n][n];
 	frameRate(fps);
 	init();
 }
@@ -79,11 +80,15 @@ void init()
 				cells[row][col] = W;
 		}		
 	}
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++) {
+			clean[i][j] = cells[i][j];	
+		}
+	}
 
 	while (numFish > 0) {
 		int row = round(random(0,n-1));
 		int col = round(random(0,n-2));
-		println(row,col);
 		if (cells[row][col] == W)
 			cells[row][col] = F0;
 			numFish--;
@@ -104,13 +109,14 @@ void nextGen()
 		next[n-1][n-1] = H;
 		counter++;
 	}
-	else if (counter == 25) {
+	else if (counter == n) {
 		next[0][n-1] = L;
 		counter = 0;
 	}
 	else {
 		for (int row = 0; row < n; row++) {
 			if (cells[row][n-1] == H) {
+				// println(row,n);
 				next[row][n-1] = L;
 				next[row-1][n-1] = H;
 				counter++;
@@ -118,26 +124,43 @@ void nextGen()
 		}
 	}
 
-//	FISH MOVEMENT
-//	
+// 	FISH MOVEMENT
+	
 // RANDOM NUMBER REPRESENTS THE DIRECTION THAT THE FISH WILL MOVE
-//
 
-	// for (int row = 0; row < n; row++) {
-	// 	for (int col = 0; col < n; ++col) {
-	// 		if (cells[i][j] = F0 || cells[i][j] = F1 || cells[i][j] = F2) {
-	// 			dx = round(random(-1,1));
-	// 			dy = round(random(-1,1);
 
-	// 		}
-	// 	}
-	// }
+	for (int row = 0; row < n; row++) {
+		for (int col = 0; col < n; ++col) {
+
+			if (cells[row][col] == F0 || cells[row][col] == F1 || cells[row][col] == F2) {
+				int fishType = cells[row][col];
+				boolean tryAgain = true;
+
+				while (tryAgain == true) {
+					// println(row,col);
+					int dx = round(random(-1,1));
+					int dy = round(random(-1,1));
+					try {
+						if (next[row + dx][col + dy] == W && (col + dx) != n) {
+							next[row + dx][col + dy] = fishType;
+							next[row][col] = W;
+							tryAgain = false;
+							if (dx == 0 && dy ==0) { tryAgain = true; }
+						}
+					}
+					catch (ArrayIndexOutOfBoundsException e) {}
+					}
+				}
+			}
+		}
+
 	
 
 //	UPDATE CELLS[][] WITH NEXT[][]
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < n; j++) {
 			cells[i][j] = next[i][j];
+			next[i][j] = clean[i][j];
 		}
 	}
 }
