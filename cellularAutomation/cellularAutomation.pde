@@ -1,9 +1,9 @@
 // CONSTANTS
-int n = 25;
+int n = 50;
 int padding = 0;
 int fps = 2;
-float percentFish = 0.025;
-float plasticChance = 1;
+float percentFish = 0.01;
+float plasticChance = 0.1;
 float microplasticChance = 0.75;
 
 //DO NOT MODIFY
@@ -71,9 +71,9 @@ void draw()
 	        	fill(255);
 
       rect(x, y, cellSize, cellSize);
-    }
-  }
-  nextGen();
+    	}
+	}
+	nextGen();
 }
 
 
@@ -130,36 +130,6 @@ void moveHuman()
 	}
 }
 
-
-void moveFish()
-{
-	for (int row = 0; row < n; row++) {
-		for (int col = 0; col < n; ++col) {
-
-			if (cells[row][col] == F0 || cells[row][col] == F1 || cells[row][col] == F2) {
-				int fishType = cells[row][col];
-				boolean tryAgain = true;
-
-				while (tryAgain == true) {
-					// println(row,col);
-					int dx = round(random(-1,1));
-					int dy = round(random(-1,1));
-					try {
-						if (next[row + dx][col + dy] == W && (col + dx) != n) {
-							next[row + dx][col + dy] = fishType;
-							next[row][col] = W;
-							tryAgain = false;
-							if (dx == 0 && dy ==0) { tryAgain = true; }
-						}
-					}
-					catch (ArrayIndexOutOfBoundsException e) {}
-					}
-				}
-			}
-		}
-}
-
-
 void spawnPlastic()
 {
 	for (int row = 0; row < n; row++) {
@@ -176,7 +146,72 @@ void spawnPlastic()
 		}
 	}
 }
- 
+
+void movePlastic()
+{
+	for (int row = 0; row < n; row++) {
+		for (int col = 0; col < n; ++col) {
+			if (cells[row][col] == MP || cells[row][col] == LP) {
+				int type = cells[row][col];
+				boolean tryAgain = true;
+
+				while (tryAgain == true) {
+					// println(row,col);
+					int dx = round(random(-1,1));
+					int dy = round(random(-1,1));
+					
+					try {
+						if ((next[row + dx][col + dy] == W )) {	
+								if (dx == 0 && dy == 0) { tryAgain = true; }
+								else {
+									next[row + dx][col + dy] = type;
+									println(row,col);
+									println(dx,dy);
+									println(row+dx,col+dy);
+									tryAgain = false;
+								}
+						}	
+					}
+					catch (ArrayIndexOutOfBoundsException e) {tryAgain = true;}
+				} 
+			}
+		}
+	}
+}
+
+void moveFish()
+{
+	for (int row = 0; row < n; row++) {
+		for (int col = 0; col < n; ++col) {
+
+			if (cells[row][col] == F0 || cells[row][col] == F1 || cells[row][col] == F2) {
+				int fishType = cells[row][col];
+				boolean tryAgain = true;
+
+				while (tryAgain == true) {
+					// println(row,col);
+					int dx = round(random(-1,1));
+					int dy = round(random(-1,1));
+					try {
+						if (next[row + dx][col + dy] == W) {
+							next[row + dx][col + dy] = fishType;
+							next[row][col] = W;
+							if (dx == 0 && dy ==0) { tryAgain = true; }
+							else { tryAgain = false; }
+						}
+
+					}
+					catch (ArrayIndexOutOfBoundsException e) {tryAgain = true;}
+					}
+				}
+			}
+		}
+}
+
+
+
+
+
 
 void updateCells()
 {
@@ -193,7 +228,9 @@ void nextGen()
 	moveHuman();
 	moveFish();
 	spawnPlastic();
+	movePlastic();
 	updateCells();
+	println();
 }
 
 
