@@ -233,13 +233,11 @@ void moveFish()
 						}
 					}
 					catch (ArrayIndexOutOfBoundsException e) {tryAgain = true;}
-					}
 				}
 			}
 		}
+	}
 }
-
-
 
 
 
@@ -266,45 +264,3 @@ void nextGen()
 	updateCells();
 	println();
 }
-
-
-// void nextGen()
-// {
-// 	for (int row = 0; row < n; row++) {
-// 		for (int col = 0; col < n; col++) {
-// 			int neighbours = livingNeighbors(row, col);
-
-// 			if (cells[row][col])
-// 				if (neighbours == 2 || neighbours == 3)
-// 					next[row][col] = true;
-// 				elseneighbours
-// 					next[row][col] = false;
-// 			else
-// 				if (neighbours == 3)
-// 					next[row][col] = true;
-// 				else
-// 					next[row][col] = false;
-// 		}
-// 	}
-
-// 	for (int i = 0; i < n; i++) {
-// 		for (int j = 0; j < n; j++) {
-// 			cells[i][j] = next[i][j];
-// 		}
-// 	}
-// }
-
-// int livingNeighbors(int i, int j)
-// {
-// 	int count = 0;
-// 	for (int a = -1; a < 2; a++) {
-// 		for (int b = -1; b < 2; b++) {
-// 				try {
-// 					if (cells[i + a][j + b] && (a!=0 || b!=0))
-// 						count++;
-// 				}
-// 				catch (ArrayIndexOutOfBoundsException e){}
-// 		}
-// 	}
-// 	return count;
-// }
