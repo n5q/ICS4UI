@@ -1,8 +1,10 @@
 // CONSTANTS
-int n = 50;
+int n = 25;
 int padding = 0;
 int fps = 2;
 float percentFish = 0.025;
+float plasticChance = 1;
+float microplasticChance = 0.75;
 
 //DO NOT MODIFY
 int numFish = round(n*(n-1)*percentFish);
@@ -12,12 +14,9 @@ int[][] cells;
 int[][] next;
 int[][] clean;
 
-
 ///////////////////////////////////////////////////////////
 // BOOL ISGREEN[], ISGREENNEXT[], ISPINK[], ISPINKNEXT[] //
 ///////////////////////////////////////////////////////////
-
-
 
 final int W  = 0;	// WATER
 final int L  = 1;	// LAND
@@ -61,8 +60,16 @@ void draw()
 
 	        else if (cells[i][j] == H)
 	        	fill(0);
+
+	        else if (cells[i][j] == LP)
+	        	fill(255,0,0);
+
+	        else if (cells[i][j] == MP)
+	        	fill(0,255,0);
+
 	        else
 	        	fill(255);
+
       rect(x, y, cellSize, cellSize);
     }
   }
@@ -101,10 +108,8 @@ void init()
 }
 
 
-void nextGen()
+void moveHuman()
 {
-
-//	HUMAN MOVEMENT
 	if (counter == 0) {
 		next[n-1][n-1] = H;
 		counter++;
@@ -123,12 +128,11 @@ void nextGen()
 			}
 		}
 	}
-
-// 	FISH MOVEMENT
-	
-// RANDOM NUMBER REPRESENTS THE DIRECTION THAT THE FISH WILL MOVE
+}
 
 
+void moveFish()
+{
 	for (int row = 0; row < n; row++) {
 		for (int col = 0; col < n; ++col) {
 
@@ -153,16 +157,43 @@ void nextGen()
 				}
 			}
 		}
+}
 
-	
 
-//	UPDATE CELLS[][] WITH NEXT[][]
+void spawnPlastic()
+{
+	for (int row = 0; row < n; row++) {
+		if (next[row][n-1] == H) {
+			int drop = round(random(0,100));
+			int type = round(random(0,100));
+
+			if ((microplasticChance*100) >= type) { type = MP; }
+			else { type = LP; }
+
+			if ((plasticChance*100) >= drop && next[row][n-2] == W) {
+				next[row][n-2] = type;
+			}
+		}
+	}
+}
+
+
+void updateCells()
+{
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < n; j++) {
 			cells[i][j] = next[i][j];
 			next[i][j] = clean[i][j];
 		}
 	}
+}
+
+void nextGen()
+{
+	moveHuman();
+	moveFish();
+	spawnPlastic();
+	updateCells();
 }
 
 
