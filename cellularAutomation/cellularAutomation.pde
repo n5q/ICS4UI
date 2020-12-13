@@ -1,9 +1,9 @@
 // CONSTANTS
 int n = 50;
 int padding = 0;
-int fps = 2;
-float percentFish = 0.01;
-float plasticChance = 0.1;
+int fps = 50;
+float percentFish = 0.05;
+float plasticChance = 0.5;
 float microplasticChance = 0.75;
 
 //DO NOT MODIFY
@@ -55,6 +55,12 @@ void draw()
 	        else if (cells[i][j] == F0)
 	        	fill(255,120,150);
 
+	        else if (cells[i][j] == F1)
+	        	fill(160,80,140);
+
+	        else if (cells[i][j] == F2)
+	        	fill(120,30,100);	        
+
 			else if (cells[i][j] == L)
 	        	fill(210,180,140);
 
@@ -62,10 +68,10 @@ void draw()
 	        	fill(0);
 
 	        else if (cells[i][j] == LP)
-	        	fill(255,0,0);
+	        	fill(255);
 
 	        else if (cells[i][j] == MP)
-	        	fill(0,255,0);
+	        	fill(150,150,255);
 
 	        else
 	        	fill(255);
@@ -165,9 +171,6 @@ void movePlastic()
 								if (dx == 0 && dy == 0) { tryAgain = true; }
 								else {
 									next[row + dx][col + dy] = type;
-									println(row,col);
-									println(dx,dy);
-									println(row+dx,col+dy);
 									tryAgain = false;
 								}
 						}	
@@ -194,12 +197,40 @@ void moveFish()
 					int dy = round(random(-1,1));
 					try {
 						if (next[row + dx][col + dy] == W) {
-							next[row + dx][col + dy] = fishType;
-							next[row][col] = W;
-							if (dx == 0 && dy ==0) { tryAgain = true; }
-							else { tryAgain = false; }
+							if (dx == 0 && dy == 0) { tryAgain = true; }
+							else {
+								next[row + dx][col + dy] = fishType;
+								tryAgain = false;							
+							// if (dx == 0 && dy ==0) {}
+							// else {
+							// 	next[row + dx][col + dy] = fishType;
+							// 	next[row][col] = W;
+							// 	tryAgain = false; 
+							}
 						}
+						else if (next[row + dx][col + dy] == LP || next[row + dx][col + dy] == MP) {
+							if (next[row + dx][col + dy] == LP) {
+								
+								if (dx == 0 && dy ==0) {}
+								else {
+									next[row + dx][col + dy] = W;
+									next[row][col] = W;
+									tryAgain = false;
+								}
+							}
+							else {
+								if (dx == 0 && dy ==0) {}
+								else {
+									if (fishType == F0) {fishType = F1;} else
+									if (fishType == F1) {fishType = F2;} else
+									if (fishType == F2)	{fishType =  W;}
+									next[row + dx][col + dy] = fishType;
+									next[row][col] = W;
+									tryAgain = false;
 
+								}
+							}
+						}
 					}
 					catch (ArrayIndexOutOfBoundsException e) {tryAgain = true;}
 					}
@@ -215,20 +246,23 @@ void moveFish()
 
 void updateCells()
 {
+	int a = 0;
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < n; j++) {
 			cells[i][j] = next[i][j];
+			if (cells[i][j] == F0) a++;
 			next[i][j] = clean[i][j];
 		}
 	}
+	println(a);
 }
 
 void nextGen()
 {
 	moveHuman();
+	movePlastic();
 	moveFish();
 	spawnPlastic();
-	movePlastic();
 	updateCells();
 	println();
 }
@@ -274,4 +308,3 @@ void nextGen()
 // 	}
 // 	return count;
 // }
-
