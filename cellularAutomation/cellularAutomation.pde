@@ -1,13 +1,13 @@
-// CONSTANTS
-int n = 50;
-int padding = 0;
-int fps = 100;
+// MODIFY THESE
+int size = 50;
+int speed = 100;
 float percentFish = 0.05;
-float plasticChance = 0.3;
-float microplasticChance = 0.9;
+float plasticChance = 0.5;
+float microplasticChance = 0.75;
+boolean borders = true;
 
 //DO NOT MODIFY
-int numFish = round(n*(n-1)*percentFish);
+int numFish = round(size*(size-1)*percentFish);
 int counter = 0;
 float cellSize;
 int[][] cells; 
@@ -26,24 +26,29 @@ final int MP = 7;	// MICROPLASTIC
 
 void setup()
 {
-	size(900,900);
-	cellSize = (width-2*padding)/n;
-	cells = new int[n][n];
-	next = new int[n][n];
-	clean = new int[n][n];
-	frameRate(fps);
+	size(1080,900);
+	cellSize = (width-180)/float(size);
+	println(cellSize);
+	cells = new int[size][size];
+	next = new int[size][size];
+	clean = new int[size][size];
+	frameRate(speed);
+	if (!borders) {noStroke();}
 	init();
+
+
+
 }
 
 
 void draw()
 {  
 	background(0,0,0);
-	for(int i = 0; i < n; i++) {
-		float y = padding + i*cellSize;
+	for(int i = 0; i < size; i++) {
+		float y = i*cellSize;
 
-		for (int j = 0; j < n; j++) {
-			float x = padding + j*cellSize;
+		for (int j = 0; j < size; j++) {
+			float x = j*cellSize;
 
 			if (cells[i][j] == W) 
 	        	fill(75,75,255);
@@ -81,29 +86,29 @@ void draw()
 
 void init()
 {	
-	for (int row = 0; row < n; row++) {
-		for (int col = 0; col < n; col++) {
-			if (col == n-1)
+	for (int row = 0; row < size; row++) {
+		for (int col = 0; col < size; col++) {
+			if (col == size-1)
 				cells[row][col] = L;
 			else
 				cells[row][col] = W;
 		}		
 	}
-	for (int i = 0; i < n; i++) {
-		for (int j = 0; j < n; j++) {
+	for (int i = 0; i < size; i++) {
+		for (int j = 0; j < size; j++) {
 			clean[i][j] = cells[i][j];	
 		}
 	}
 
 	while (numFish > 0) {
-		int row = round(random(0,n-1));
-		int col = round(random(0,n-2));
+		int row = round(random(0,size-1));
+		int col = round(random(0,size-2));
 		if (cells[row][col] == W)
 			cells[row][col] = F0;
 			numFish--;
 	}
-	for (int i = 0; i < n; i++) {
-		for (int j = 0; j < n; j++) {
+	for (int i = 0; i < size; i++) {
+		for (int j = 0; j < size; j++) {
 			next[i][j] = cells[i][j];	
 		}
 	}
@@ -113,19 +118,19 @@ void init()
 void moveHuman()
 {
 	if (counter == 0) {
-		next[n-1][n-1] = H;
+		next[size-1][size-1] = H;
 		counter++;
 	}
-	else if (counter == n) {
-		next[0][n-1] = L;
+	else if (counter == size) {
+		next[0][size-1] = L;
 		counter = 0;
 	}
 	else {
-		for (int row = 0; row < n; row++) {
-			if (cells[row][n-1] == H) {
-				// println(row,n);
-				next[row][n-1] = L;
-				next[row-1][n-1] = H;
+		for (int row = 0; row < size; row++) {
+			if (cells[row][size-1] == H) {
+				// println(row,size);
+				next[row][size-1] = L;
+				next[row-1][size-1] = H;
 				counter++;
 			}
 		}
@@ -134,16 +139,16 @@ void moveHuman()
 
 void spawnPlastic()
 {
-	for (int row = 0; row < n; row++) {
-		if (next[row][n-1] == H) {
+	for (int row = 0; row < size; row++) {
+		if (next[row][size-1] == H) {
 			int drop = round(random(0,100));
 			int type = round(random(0,100));
 
 			if ((microplasticChance*100) >= type) { type = MP; }
 			else { type = LP; }
 
-			if ((plasticChance*100) >= drop && next[row][n-2] == W) {
-				next[row][n-2] = type;
+			if ((plasticChance*100) >= drop && next[row][size-2] == W) {
+				next[row][size-2] = type;
 			}
 		}
 	}
@@ -151,8 +156,8 @@ void spawnPlastic()
 
 void movePlastic()
 {
-	for (int row = 0; row < n; row++) {
-		for (int col = 0; col < n; ++col) {
+	for (int row = 0; row < size; row++) {
+		for (int col = 0; col < size; ++col) {
 			if (cells[row][col] == MP || cells[row][col] == LP) {
 				int type = cells[row][col];
 				boolean tryAgain = true;
@@ -186,8 +191,8 @@ void movePlastic()
 
 void moveFish()
 {
-	for (int row = 0; row < n; row++) {
-		for (int col = 0; col < n; ++col) {
+	for (int row = 0; row < size; row++) {
+		for (int col = 0; col < size; ++col) {
 
 			if (cells[row][col] == F0 || cells[row][col] == F1 || cells[row][col] == F2) {
 				int fishType = cells[row][col];
@@ -249,14 +254,13 @@ void moveFish()
 void updateCells()
 {
 	int a = 0;
-	for (int i = 0; i < n; i++) {
-		for (int j = 0; j < n; j++) {
+	for (int i = 0; i < size; i++) {
+		for (int j = 0; j < size; j++) {
 			cells[i][j] = next[i][j];
 			if (cells[i][j] == F0) a++;
 			next[i][j] = clean[i][j];
 		}
 	}
-	println(a);
 }
 
 void nextGen()
@@ -266,5 +270,11 @@ void nextGen()
 	moveFish();
 	spawnPlastic();
 	updateCells();
-	println();
+
+	String text = "Fish alive:" + ;
+	fill(255);
+	textSize(22);
+	text(text, width-150, 50);
+
+
 }
