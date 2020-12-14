@@ -2,9 +2,9 @@
 int n = 50;
 int padding = 0;
 int fps = 100;
-float percentFish = 0.5;
-float plasticChance = 0.0;
-float microplasticChance = 0.75;
+float percentFish = 0.05;
+float plasticChance = 0.3;
+float microplasticChance = 0.9;
 
 //DO NOT MODIFY
 int numFish = round(n*(n-1)*percentFish);
@@ -13,10 +13,6 @@ float cellSize;
 int[][] cells; 
 int[][] next;
 int[][] clean;
-
-///////////////////////////////////////////////////////////
-// BOOL ISGREEN[], ISGREENNEXT[], ISPINK[], ISPINKNEXT[] //
-///////////////////////////////////////////////////////////
 
 final int W  = 0;	// WATER
 final int L  = 1;	// LAND
@@ -181,7 +177,7 @@ void movePlastic()
 						}	
 					}
 					catch (ArithmeticException e) {tryAgain = false;}
-					catch (ArrayIndexOutOfBoundsException e) {println(row,col); loop--;}
+					catch (ArrayIndexOutOfBoundsException e) {tryAgain = true;}
 				} 
 			}
 		}
@@ -240,7 +236,7 @@ void moveFish()
 						}
 					}
 					catch (ArithmeticException e) {tryAgain = false;}
-					catch (ArrayIndexOutOfBoundsException e) {println(row,col); loop--;}
+					catch (ArrayIndexOutOfBoundsException e) {tryAgain = true;}
 				}
 			}
 		}
