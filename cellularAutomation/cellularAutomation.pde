@@ -1,9 +1,9 @@
 // CONSTANTS
 int n = 50;
 int padding = 0;
-int fps = 50;
-float percentFish = 0.05;
-float plasticChance = 0.5;
+int fps = 100;
+float percentFish = 0.5;
+float plasticChance = 0.0;
 float microplasticChance = 0.75;
 
 //DO NOT MODIFY
@@ -160,14 +160,19 @@ void movePlastic()
 			if (cells[row][col] == MP || cells[row][col] == LP) {
 				int type = cells[row][col];
 				boolean tryAgain = true;
-
-				while (tryAgain == true) {
+				int loop = 20;
+				while (tryAgain == true && loop > 0) {
 					// println(row,col);
 					int dx = round(random(-1,1));
 					int dy = round(random(-1,1));
-					
 					try {
-						if ((next[row + dx][col + dy] == W )) {	
+						loop--;
+
+						if (loop < 0) {
+							println(0/0);
+						}
+
+						else if ((next[row + dx][col + dy] == W )) {	
 								if (dx == 0 && dy == 0) { tryAgain = true; }
 								else {
 									next[row + dx][col + dy] = type;
@@ -175,7 +180,8 @@ void movePlastic()
 								}
 						}	
 					}
-					catch (ArrayIndexOutOfBoundsException e) {tryAgain = true;}
+					catch (ArithmeticException e) {tryAgain = false;}
+					catch (ArrayIndexOutOfBoundsException e) {println(row,col); loop--;}
 				} 
 			}
 		}
@@ -190,22 +196,23 @@ void moveFish()
 			if (cells[row][col] == F0 || cells[row][col] == F1 || cells[row][col] == F2) {
 				int fishType = cells[row][col];
 				boolean tryAgain = true;
-
-				while (tryAgain == true) {
+				int loop = 20;
+				while (tryAgain == true && loop > 0) {
 					// println(row,col);
 					int dx = round(random(-1,1));
 					int dy = round(random(-1,1));
 					try {
-						if (next[row + dx][col + dy] == W) {
+						loop--;
+
+						if (loop < 0) {
+							println(0/0);
+						}
+
+						else if (next[row + dx][col + dy] == W) {
 							if (dx == 0 && dy == 0) { tryAgain = true; }
 							else {
 								next[row + dx][col + dy] = fishType;
 								tryAgain = false;							
-							// if (dx == 0 && dy ==0) {}
-							// else {
-							// 	next[row + dx][col + dy] = fishType;
-							// 	next[row][col] = W;
-							// 	tryAgain = false; 
 							}
 						}
 						else if (next[row + dx][col + dy] == LP || next[row + dx][col + dy] == MP) {
@@ -232,7 +239,8 @@ void moveFish()
 							}
 						}
 					}
-					catch (ArrayIndexOutOfBoundsException e) {tryAgain = true;}
+					catch (ArithmeticException e) {tryAgain = false;}
+					catch (ArrayIndexOutOfBoundsException e) {println(row,col); loop--;}
 				}
 			}
 		}
