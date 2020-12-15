@@ -1,10 +1,10 @@
 // MODIFY THESE
-int size = 50;
-int speed = 100;
-float percentFish = 0.05;
-float plasticChance = 0.5;
-float microplasticChance = 0.75;
-boolean borders = true;
+int size = 100;						// SIZE OF THE GRID (25x25 - 150x150 RECOMMENDED)
+int speed = 75;						// SPEED OF THE ANIMATION (FPS)
+float percentFish = 0.05;			// PERCENTAGE OF FISH IN COMPARISON TO THE CELL COUNT (DEFAULT IS 5%)
+float plasticChance = 0.5;			// CHANCE OF PLASTIC TO BE DROPPED BY THE HUMAN IN EACH GENERATION (DEFAULT IS 50%)
+float microplasticChance = 0.9;		// CHANCE OF EACH PLASTIC DROPPED BEING A MICROPLASTIC (DEFAULT IS 90%)
+boolean borders = true;				// CELL BORDERS
 
 //DO NOT MODIFY
 int numFish = round(size*(size-1)*percentFish);
@@ -13,6 +13,9 @@ float cellSize;
 int[][] cells; 
 int[][] next;
 int[][] clean;
+int fishAlive;
+int time;
+int numPlastic;
 
 final int W  = 0;	// WATER
 final int L  = 1;	// LAND
@@ -34,16 +37,16 @@ void setup()
 	clean = new int[size][size];
 	frameRate(speed);
 	if (!borders) {noStroke();}
+	PFont font = createFont("Arial", 20);
+	textFont(font);
 	init();
-
-
 
 }
 
 
 void draw()
 {  
-	background(0,0,0);
+	background(0);
 	for(int i = 0; i < size; i++) {
 		float y = i*cellSize;
 
@@ -80,7 +83,17 @@ void draw()
       rect(x, y, cellSize, cellSize);
     	}
 	}
+
+
+	String alive = "Fish alive:  " + fishAlive;
+	String t = "Generations:  " + time;
+	fill(255);
+
+	text(alive, width-160, 50);
+	text(t, width-175, 100);
+
 	nextGen();
+	time++;
 }
 
 
@@ -259,8 +272,10 @@ void updateCells()
 			cells[i][j] = next[i][j];
 			if (cells[i][j] == F0) a++;
 			next[i][j] = clean[i][j];
+
 		}
 	}
+	fishAlive = a;
 }
 
 void nextGen()
@@ -271,10 +286,7 @@ void nextGen()
 	spawnPlastic();
 	updateCells();
 
-	String text = "Fish alive:" + ;
-	fill(255);
-	textSize(22);
-	text(text, width-150, 50);
+
 
 
 }
