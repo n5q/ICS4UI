@@ -85,12 +85,14 @@ void draw()
 	}
 
 
-	String alive = "Fish alive:  " + fishAlive;
+	String alive = "Healthy fish:  " + fishAlive;
+	String plast = "Total plastic:  " + numPlastic;
 	String t = "Generations:  " + time;
 	fill(255);
 
-	text(alive, width-160, 50);
-	text(t, width-175, 100);
+	text(alive, width-167, 50);
+	text(plast, width-167, 100);
+	text(t, width-175, 150);
 
 	nextGen();
 	time++;
@@ -266,16 +268,18 @@ void moveFish()
 
 void updateCells()
 {
-	int a = 0;
+	int f = 0;
+	int p = 0;
 	for (int i = 0; i < size; i++) {
 		for (int j = 0; j < size; j++) {
 			cells[i][j] = next[i][j];
-			if (cells[i][j] == F0) a++;
+			if (cells[i][j] == F0) f++; else
+			if (cells[i][j] == MP || cells[i][j] == LP) p++;
 			next[i][j] = clean[i][j];
-
 		}
 	}
-	fishAlive = a;
+	fishAlive = f;
+	numPlastic = p;
 }
 
 void nextGen()
@@ -285,8 +289,4 @@ void nextGen()
 	moveFish();
 	spawnPlastic();
 	updateCells();
-
-
-
-
 }
