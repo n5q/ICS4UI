@@ -27,11 +27,44 @@ class User
 
 	void post(String c)
 	{
+		println(this.name, "has posted: ", c);
 		Post p = new Post(c, this);
-		posts.add(p);
-		nPosts++;
-		println(this.name, "has posted:", c);
+		this.posts.add(p);
+		this.nPosts++;
 	}
 
+	void delPost(Post p)
+	{
+		println(this.name, "Has deleted a post:", p.contents);
+		this.posts.remove(p);
+		this.nPosts--;
+	}
+
+	void follow(User u)
+	{
+		println(this.name, "has followed", u.name);
+		this.following.add(u);
+		this.nFollowing++;
+		u.followers.add(this);
+		u.nFollowers++;
+	}
+
+	void unfollow(User u)
+	{
+		println(this.name, "has unfollowed", u.name);
+		this.following.remove(u);
+		this.nFollowing--;
+		u.followers.remove(this);
+		u.nFollowers--;		
+	}
+
+	void like(Post p)
+	{
+		println(this.name, "has liked", p.contents, "by", p.author.name);
+		this.likedPosts.add(p);
+		p.likedBy.add(this);
+		p.likes++;
+		p.score++;
+	}
 	
 }
