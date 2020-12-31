@@ -66,5 +66,27 @@ class User
 		p.likes++;
 		p.score++;
 	}
+
+	void dislike(Post p)
+	{
+		println(this.name, "has disliked", p.contents, "by", p.author.name);
+		this.likedPosts.add(p);
+		p.score--;
+	}
+
+	void repost(Post p)
+	{
+		println(this.name, "has reposted: ", p.contents, "by", p.author);
+		Post o = new Post(p.contents, this);
+		p.reposts++;
+		p.repostedBy.add(this);
+	}
+
+	void message(User u, String s)
+	{
+		println(this.name, "has sent a message to", u.name);
+		Message m = new Message(this, u, s);
+	}
+
 	
 }
