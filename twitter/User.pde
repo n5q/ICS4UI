@@ -4,6 +4,7 @@ class User
 	int nFollowers;
 	int nFollowing;
 	int nPosts;
+	int score;
 	Site site;
 	ArrayList<Post> posts;
 	ArrayList<Post> likedPosts;
@@ -11,7 +12,7 @@ class User
 	ArrayList<User> followers;
 	ArrayList<Message> inbox;
 
-	User(String u, String n, Site s)
+	User(String n, Site s)
 	{
 		this.name = n;
 		this.nFollowers = 0;
@@ -79,7 +80,7 @@ class User
 		p.score--;
 		p.author.score--;
 		if (p.score < -5) {
-			println(p.author.name, "was ashamed of the dislikes on their post", p.contents, "so they deleted it");\
+			println(p.author.name, "was ashamed of the dislikes on their post", p.contents, "so they deleted it");
 			p.author.delPost(p);
 		}
 

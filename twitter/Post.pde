@@ -30,23 +30,21 @@ class Post
 
 	}
 
-	Post(String c, User a, Post reply;)
+	Post(String c, User a, Post reply)
 	{
-		if (reply) {
-			this.contents = c;
-			this.author = a;
-			this.likes = 0;
-			this.dislikes = 0;
-			this.reposts = 0;
-			this.score = 0;
-			this.timestamp = str(hour()) + ":" + str(minute()) + ":" + str(second());
-			this.date = str(day()) + "/" + str(month()) + "/" + str(year());
-			this.likedBy = new ArrayList<User>();
-			this.repostedBy = new ArrayList<User>();
-			this.parent = reply;
-			this.parent.nReplies++;
-			this.parent.replies.add(this);
-		}
+		this.contents = c;
+		this.author = a;
+		this.likes = 0;
+		this.dislikes = 0;
+		this.reposts = 0;
+		this.score = 0;
+		this.timestamp = str(hour()) + ":" + str(minute()) + ":" + str(second());
+		this.date = str(day()) + "/" + str(month()) + "/" + str(year());
+		this.likedBy = new ArrayList<User>();
+		this.repostedBy = new ArrayList<User>();
+		this.parent = reply;
+		this.parent.nReplies++;
+		this.parent.replies.add(this);
 
 	}
 
