@@ -52,10 +52,16 @@ class Post
 	{
 		println("***********************************");
 		println("Post by:", this.author.name);
-		println("♥", this.likes, " ↩", this.nReplies, " 🔁", this.reposts);
-		println("__________________________");
 		println(this.contents);
+		println("♥", this.likes, " ↩", this.nReplies, " 🔁", this.reposts);
 		println("***********************************");
+
+		for (Post p: this.replies) {
+			println("___________________________________");
+			println("Reply by:", p.author.name);
+			println(p.contents);
+			println("♥", p.likes, " ↩", p.nReplies, " 🔁", p.reposts);			
+		}
 	}
 
 	void reply(User u, String c)

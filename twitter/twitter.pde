@@ -4,11 +4,9 @@ void setup()
 
 	User nsq = new User("nsq", twitter);
 
-	nsq.post("bruh");
+	// nsq.post("bruh");
 
-	nsq.like(nsq.posts.get(0));
-
-	nsq.posts.get(0).display();
+	// nsq.like(nsq.posts.get(0));
 
 
 }
