@@ -10,7 +10,7 @@ class User
 	ArrayList<Post> likedPosts;
 	ArrayList<User> following;
 	ArrayList<User> followers;
-	ArrayList<Message> inbox;
+	boolean loggedIn;
 
 	User(String n, Site s)
 	{
@@ -23,16 +23,39 @@ class User
 		this.likedPosts = new ArrayList<Post>();
 		this.following = new ArrayList<User>();
 		this.followers = new ArrayList<User>();
-		this.inbox = new ArrayList<Message>();
 		this.site = s;
+		s.users.add(this);
+		this.loggedIn = false;
+		println(this.name, "has created an account");
 	}
+
+	User(Site s)
+	{
+		int n = round(random(10000));
+		this.name = ("Anonymous User #" + str(n));
+		this.nFollowers = 0;
+		this.nFollowing = 0;
+		this.nPosts = 0;
+		this.score = 0;
+		this.posts = new ArrayList<Post>();
+		this.likedPosts = new ArrayList<Post>();
+		this.following = new ArrayList<User>();
+		this.followers = new ArrayList<User>();
+		this.site = s;
+		s.users.add(this);
+		this.loggedIn = false;
+		println(this.name, "has created an account");
+	}
+
 
 	void post(String c)
 	{
-		println(this.name, "has posted: ", c);
+		// println(this.name, "has posted: ", c);
 		Post p = new Post(c, this);
 		this.posts.add(p);
 		this.nPosts++;
+		println("New post by", this.name);
+
 	}
 
 	void delPost(Post p)
@@ -65,7 +88,7 @@ class User
 
 	void like(Post p)
 	{
-		println(this.name, "has liked", p.contents, "by", p.author.name);
+		println(this.name, "has liked a post by", p.author.name);
 		this.likedPosts.add(p);
 		p.likedBy.add(this);
 		p.likes++;
@@ -97,17 +120,6 @@ class User
 		Post o = new Post(p.contents, this);
 		p.reposts++;
 		p.repostedBy.add(this);
-	}
-
-	void message(User u, String s)
-	{
-		println(this.name, "has sent a message to", u.name);
-		Message m = new Message(this, u, s);
-	}
-
-	void reply(Post p, String c)
-	{
-		p.reply(this, c);
 	}
 
 

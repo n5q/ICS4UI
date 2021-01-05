@@ -24,9 +24,10 @@ class Post
 		this.reposts = 0;
 		this.score = 0;
 		this.timestamp = str(hour()) + ":" + str(minute()) + ":" + str(second());
-		this.date = str(day()) + "/" + str(month()) + "/" + str(year());
+		this.date = str(month()) + "/" + str(day()) + "/" + str(year());
 		this.likedBy = new ArrayList<User>();
 		this.repostedBy = new ArrayList<User>();
+		this.replies = new ArrayList<Post>();
 
 	}
 
@@ -39,9 +40,10 @@ class Post
 		this.reposts = 0;
 		this.score = 0;
 		this.timestamp = str(hour()) + ":" + str(minute()) + ":" + str(second());
-		this.date = str(day()) + "/" + str(month()) + "/" + str(year());
+		this.date = str(month()) + "/" + str(day()) + "/" + str(year());
 		this.likedBy = new ArrayList<User>();
 		this.repostedBy = new ArrayList<User>();
+		this.replies = new ArrayList<Post>();
 		this.parent = reply;
 		this.parent.nReplies++;
 		this.parent.replies.add(this);
@@ -53,14 +55,18 @@ class Post
 		println("***********************************");
 		println("Post by:", this.author.name);
 		println(this.contents);
-		println("♥", this.likes, " ↩", this.nReplies, " 🔁", this.reposts);
+		println("♥", this.score, " ↩", this.nReplies, " 🔁", this.reposts);
+		println("Posted on", this.date, "at", this.timestamp);
 		println("***********************************");
+
 
 		for (Post p: this.replies) {
 			println("___________________________________");
 			println("Reply by:", p.author.name);
 			println(p.contents);
-			println("♥", p.likes, " ↩", p.nReplies, " 🔁", p.reposts);			
+			println("♥", p.score, " ↩", p.nReplies, " 🔁", p.reposts);	
+			println("Replies on", this.date, "at", this.timestamp);
+			p.display();
 		}
 	}
 

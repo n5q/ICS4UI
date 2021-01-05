@@ -7,6 +7,14 @@ class Site
 	Site(String n)
 	{
 		this.name = n;
+		this.users = new ArrayList<User>();
+		this.posts = new ArrayList<Post>();
+	}
+
+	Site()
+	{
+		this.users = new ArrayList<User>();
+		this.posts = new ArrayList<Post>();
 	}
 
 	void delUser(User u)
