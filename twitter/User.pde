@@ -55,6 +55,7 @@ class User
 		this.posts.add(p);
 		this.nPosts++;
 		println("New post by", this.name);
+		p.display();
 
 	}
 
@@ -98,16 +99,16 @@ class User
 
 	void dislike(Post p)
 	{
-		println(this.name, "has disliked", p.contents, "by", p.author.name);
+		println(this.name, "has disliked a post by", p.author.name);
 		this.likedPosts.add(p);
 		p.score--;
 		p.author.score--;
-		if (p.score < -5) {
+		if (p.score < -2) {
 			println(p.author.name, "was ashamed of the dislikes on their post", p.contents, "so they deleted it");
 			p.author.delPost(p);
 		}
 
-		if (p.author.score < -10) {
+		if (p.author.score < -5) {
 			println(p.author.name, "could not live with the fact that nobody likes their posts, so they deleted their account");
 			p.author.site.delUser(p.author);
 		}
@@ -120,6 +121,7 @@ class User
 		Post o = new Post(p.contents, this);
 		p.reposts++;
 		p.repostedBy.add(this);
+		p.display();
 	}
 
 

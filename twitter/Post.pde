@@ -61,12 +61,11 @@ class Post
 
 
 		for (Post p: this.replies) {
-			println("___________________________________");
+			println("-----------------------------------");
 			println("Reply by:", p.author.name);
 			println(p.contents);
 			println("♥", p.score, " ↩", p.nReplies, " 🔁", p.reposts);	
-			println("Replies on", this.date, "at", this.timestamp);
-			p.display();
+			println("Replied on", this.date, "at", this.timestamp);
 		}
 	}
 
@@ -76,5 +75,6 @@ class Post
 		Post p = new Post(c, u, this);
 		u.posts.add(p);
 		u.nPosts++;
+		this.display();
 	}
 }
