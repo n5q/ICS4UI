@@ -1,3 +1,11 @@
+// float aMax = 0.5;
+// float aMin = -1;
+
+// float bMax = 0.75;
+// float bMin = -0.75;
+// float w = 2100;
+// float h = 2100;
+
 float aMax = 1;
 float aMin = -2;
 
@@ -15,8 +23,8 @@ void setup()
 {
 	size(1000, 1000);
 	background(0);
-	fill(255);
-	stroke(255);
+	fill(0);
+	stroke(0);
 	noLoop();
 
 }
@@ -24,21 +32,27 @@ void setup()
 void draw()
 {
 
-	for (float x = 0; x <= 1000; x+=1) {
+	for (float x = 0; x <= 5000; x+=0.5) {
 		float a = get_a(x);
-		for (float y = 0; y <= 1000; y+=1) {
+		for (float y = 0; y <= 5000; y+=0.5) {
 			float bi = get_bi(y);
 
 			Complex c = new Complex(a, bi);
 			Complex z = c;
 			int n = 0;
 
-			while (z.abs() < 2 && n < 200) {
+			while (z.abs() < 2 && n < 255) {
 				z = z.squared().add(c);
 				n++;
 			}
 
-			if (n == 200) {
+			if (n == 255) {
+				stroke(0);
+				point(x,y);
+			}
+			else {
+				color k = color(70,150,255,2*n);
+				stroke(k);
 				point(x,y);
 			}
 		}
