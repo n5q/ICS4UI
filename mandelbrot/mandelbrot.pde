@@ -1,3 +1,61 @@
+float aMax = 1;
+float aMin = -2;
+
+float bMax = 1.5;
+float bMin = -1.5;
+float w = 1000;
+float h = 1000;
+
+float slopea = (aMax-aMin)/w;
+float intercepta = aMin;
+float slopeb = (bMin-bMax)/h;
+float interceptb = bMax;
+
+void setup()
+{
+	size(1000, 1000);
+	background(0);
+	fill(255);
+	stroke(255);
+	noLoop();
+
+}
+
+void draw()
+{
+
+	for (float x = 0; x <= 1000; x+=1) {
+		float a = get_a(x);
+		for (float y = 0; y <= 1000; y+=1) {
+			float bi = get_bi(y);
+
+			Complex c = new Complex(a, bi);
+			Complex z = c;
+			int n = 0;
+
+			while (z.abs() < 2 && n < 200) {
+				z = z.squared().add(c);
+				n++;
+			}
+
+			if (n == 200) {
+				point(x,y);
+			}
+		}
+	}
+}
+
+float get_a(float x)
+{
+	return slopea*x + intercepta;
+}
+
+float get_bi(float y)
+{
+	return slopeb*y + interceptb;
+}
+
+
 class Complex
 {
 	float realPart;
@@ -23,8 +81,13 @@ class Complex
 		float r2 = z.realPart;
 		float i2 = z.imaginaryPart;
 		float real = r1*r2 - i1*i2;
-		float imaginary = r1*r2 + i1*i2;
+		float imaginary = r1*i2 + r2*i1;
 		return new Complex(real, imaginary);
+	}
+
+	Complex squared()
+	{
+		return this.multiply(this);
 	}
 
 	float abs()
@@ -60,33 +123,4 @@ class Complex
 		}
 		println(str);
 	}
-
-}
-
-void setup() {
-	Complex z = new Complex(4, 1);
-	Complex w = new Complex(2, 2);
-	Complex i = new Complex(0, 1);
-
-	Complex p = z.multiply(w);
-	p.display();
-  
-	// z.display();    //Should print "6+8i" to the screen
-	// w.display();   //Should print "-2.5-7.9i"  ("-2.5+-7.9i" is okay for today, but eventually 
- //                           //improve the code so that it prints the nicer way)
-	// i.display();    //Should print just "i"  
- //                       //"0+1i" is okay for today, but improve your code eventually)
-  
-	// float absZ = z.abs();
-	// float absI = i.abs();
-	
-	// println( absZ );   //Should print 10.0
-	// println( absI );    //Should print 1.0
-  
-	// Complex zPlusW = z.multiply( w );
-	// println(zPlusW.imaginaryPart);
-	// zPlusW.display();    //Should print "3.5+0.1i"
-  
-	// Complex wPlusI = w.multiply( i );
-	// wPlusI.display();    //Does it print the right thing?
 }
