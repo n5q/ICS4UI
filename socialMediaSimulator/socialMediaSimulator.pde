@@ -1,3 +1,6 @@
+// SOCIAL MEDIA SIMULATOR
+// NASIF QADRI ICS4UI
+
 void setup()
 {
 	Site twitter = new Site("twitter");
