@@ -3,6 +3,8 @@ PImage robot;
 int bridgePos = 100;
 int cg_xPos;
 int cg_yPos;
+int da_xPos;
+int da_yPos;
 
 void setup()
 {
@@ -15,6 +17,8 @@ void setup()
 	imageMode(CENTER);
 	cg_xPos = width/2;
 	cg_yPos = height-50;
+	da_xPos = width/2;
+	da_yPos = 50;
 }
 
 void draw()
@@ -22,7 +26,8 @@ void draw()
 	fill(100,50,50);
 	stroke(100,50,50);
 	rect(bridgePos, (height/2) - 100, 100, 200);
-	image(robot, cg_xPos, cg_yPos);	
+	image(robot, cg_xPos, cg_yPos);
+	image(robot, da_xPos, da_yPos);
 }
 
 class Robot
