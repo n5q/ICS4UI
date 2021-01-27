@@ -13,8 +13,8 @@ void setup()
 	rect(0,(height/2) - 60, width, 120);
 	robot = loadImage("robot.png");
 	imageMode(CENTER);
-	cg_xPos = width-100;
-	cg_yPos = height-100;
+	cg_xPos = width/2;
+	cg_yPos = height-50;
 }
 
 void draw()
@@ -29,10 +29,15 @@ class Robot
 {
 	int x,y;
 	Algorithm algorithm;
+	int distanceTraveled;
+	int walkingSpeed;
 
 	Robot(int initX, int initY, Algorithm algo)
 	{
-
+		this.x = initX;
+		this.y = initY;
+		this.algorithm = algo;
+		this.distanceTraveled = 0;
 	}	
 }
 
