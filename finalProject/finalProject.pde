@@ -1,9 +1,3 @@
-
-// MAKE ROBOTS MOVE 1 STEP A FRAME, NOT 1 TERM
-
-
-
-
 PImage robot;
 int bridgePos;
 int cg_xStart;
@@ -16,7 +10,7 @@ Robot da;
 void setup()
 {
 	size(1200,800);
-	frameRate(2);
+	frameRate(60);
 	robot = loadImage("robot.png");
 	imageMode(CENTER);
 	bridgePos = 100;
@@ -58,6 +52,7 @@ class Robot
 	int speed;
 	char direction;
 	int term;
+	int counter;
 
 	Robot(int initX, int initY, String algo)
 	{
@@ -65,31 +60,50 @@ class Robot
 		this.y = initY;
 		this.algorithm = algo;
 		this.distanceTraveled = 0;
-		this.speed = 20;
+		this.speed = 1;
 		this.direction = 'L';
+		this.counter = 0;
 	}
 
 	void move()
 	{
-		int next = this.nextTerm();
-		if (this.direction == 'R') {
-			for (int i = 0; i < next; i++) {
+		if (this.counter == 0) {
+			this.counter = this.nextTerm();
+			// this.y-=10;
+			this.turn();
+		}
+
+		else {
+			if (this.direction == 'R') {
 				this.x++;
 				this.distanceTraveled++;
+				this.counter--;
 			}
-		}
-		else {
-			for (int i = 0; i < next; i++) {
+			else {
 				this.x--;
 				this.distanceTraveled++;
-			}	
+				this.counter--;
+			}
 		}
-		this.turn();
+
+		// int next = this.nextTerm();
+		// if (this.direction == 'R') {
+		// 	for (int i = 0; i < next; i++) {
+		// 		this.x++;
+		// 		this.distanceTraveled++;
+		// 	}
+		// }
+		// else {
+		// 	for (int i = 0; i < next; i++) {
+		// 		this.x--;
+		// 		this.distanceTraveled++;
+		// 	}	
+		// }
+		// this.turn();
 	}
 
 	int nextTerm()
 	{
-		println(frameCount);
 		if (this.algorithm == "CG") {
 			return speed*(frameCount);
 		}
