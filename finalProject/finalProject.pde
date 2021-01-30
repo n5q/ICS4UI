@@ -78,13 +78,13 @@ void clean()
 
 class Robot
 {
-	int x,y;
+	float x,y;
 	int initX, initY;
 	String algorithm;
-	int distanceTraveled;
-	int speed;
+	float distanceTraveled;
+	int step;
 	char direction;
-	int counter;
+	float counter;
 	int term;
 
 	Robot(int initX, int initY, String algo)
@@ -95,7 +95,7 @@ class Robot
 		this.initY = initY;
 		this.algorithm = algo;
 		this.distanceTraveled = 0;
-		this.speed = 1;
+		this.step = 1;
 		this.direction = 'L';
 		this.counter = 0;
 		this.term = 0;
@@ -110,17 +110,30 @@ class Robot
 			this.term++;
 		}
 
-		else {
+		else if (this.algorithm == "CG") {
 			if (this.direction == 'R') {
-				this.x++;
-				this.distanceTraveled++;
-				this.counter--;
+				this.x += cgSpeedSlider.getValueF();
+				this.distanceTraveled += cgSpeedSlider.getValueF();
+				this.counter -= cgSpeedSlider.getValueF();
 			}
 			else {
-				this.x--;
-				this.distanceTraveled++;
-				this.counter--;
+				this.x -= cgSpeedSlider.getValueF();
+				this.distanceTraveled += cgSpeedSlider.getValueF();
+				this.counter -= cgSpeedSlider.getValueF();
 			}
+		}
+
+		else {
+			if (this.direction == 'R') {
+				this.x += daSpeedSlider.getValueF();
+				this.distanceTraveled += daSpeedSlider.getValueF();
+				this.counter -= daSpeedSlider.getValueF();
+			}
+			else {
+				this.x -= daSpeedSlider.getValueF();
+				this.distanceTraveled += daSpeedSlider.getValueF();
+				this.counter -= daSpeedSlider.getValueF();
+			}			
 		}
 
 		// int next = this.nextTerm();
@@ -142,12 +155,12 @@ class Robot
 	int nextTerm()
 	{
 		if (this.algorithm == "CG") {
-			println(speed*this.term);
-			return speed*(this.term);
+			println(step*this.term);
+			return step*(this.term);
 		}
 		else if (this.algorithm == "DA") {
-			println(speed*pow(2, this.term));
-			return int(speed*pow(2, this.term-1));
+			println(step*pow(2, this.term));
+			return int(step*pow(2, this.term-1));
 		}
 		return 0;
 	}
@@ -167,11 +180,11 @@ class Robot
 
 		if (this.algorithm == "CG") {
 			this.x = cgPosSlider.getValueI();
-			this.speed = cgSpeedSlider.getValueI();
+			this.step = cgStepSlider.getValueI();
 		}
 		else {
 			this.x = daPosSlider.getValueI();
-			this.speed = daSpeedSlider.getValueI();
+			this.step = daStepSlider.getValueI();
 		}
 		this.y = this.initY;
 
@@ -179,7 +192,6 @@ class Robot
 		this.counter = 0;
 		this.distanceTraveled = 0;
 	}
-
 }
 
 
