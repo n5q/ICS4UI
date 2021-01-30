@@ -20,6 +20,7 @@ synchronized public void win_draw1(PApplet appc, GWinData data) { //_CODE_:windo
 
 public void start(GButton source, GEvent event) { //_CODE_:startButton:843742:
   reset();
+  clean(false);
   pause();
 } //_CODE_:startButton:843742:
 

@@ -70,22 +70,52 @@ void clean()
 	stroke(50,150,200);
 	fill(50,150,200);
 	rect(0,(height/2) - 60, width, 120);
-	imageMode(CENTER);
 	fill(100,50,50);
 	stroke(100,50,50);
 	rect(bridgePos, (height/2) - 100, 100, 200);
+
+	stroke(255,0,0);
+	drawLines();
+}
+
+void clean(boolean lines)
+{
+	background(60,175,75);
+	stroke(50,150,200);
+	fill(50,150,200);
+	rect(0,(height/2) - 60, width, 120);
+	fill(100,50,50);
+	stroke(100,50,50);
+	rect(bridgePos, (height/2) - 100, 100, 200);
+
+	stroke(255,0,0);
+	if (lines) {
+		drawLines();
+	}
+}
+
+void drawLines()
+{
+	for (int i = 0; i < cg.lines[0].size(); i++) {
+		line(cg.lines[0].get(i), cg.lines[1].get(i), cg.lines[2].get(i), cg.lines[3].get(i));
+	}
+	for (int i = 0; i < da.lines[0].size(); i++) {
+		line(da.lines[0].get(i), da.lines[1].get(i), da.lines[2].get(i), da.lines[3].get(i));
+	}
 }
 
 class Robot
 {
 	float x,y;
-	int initX, initY;
+	float initX, initY;
+	float lastX, lastY;
 	String algorithm;
 	float distanceTraveled;
 	int step;
 	char direction;
 	float counter;
 	int term;
+	FloatList[] lines;
 
 	Robot(int initX, int initY, String algo)
 	{
@@ -93,19 +123,30 @@ class Robot
 		this.y = initY;
 		this.initX = initX;
 		this.initY = initY;
+		this.lastX = initX;
+		this.lastY = initY;
 		this.algorithm = algo;
 		this.distanceTraveled = 0;
 		this.step = 1;
 		this.direction = 'L';
 		this.counter = 0;
 		this.term = 0;
+		this.lines = new FloatList[4];
+		for (int i = 0; i <= 3; i++) {
+			this.lines[i] = new FloatList();
+		}
 	}
 
 	void move()
 	{
 		if (this.counter <= 0) {
 			this.counter = this.nextTerm();
-			// this.y-=10;
+			if (this.algorithm == "CG") {
+				this.y += 5;
+			}
+			else {
+				this.y -= 5;
+			}
 			this.turn();
 			this.term++;
 		}
@@ -135,21 +176,6 @@ class Robot
 				this.counter -= daSpeedSlider.getValueF();
 			}			
 		}
-
-		// int next = this.nextTerm();
-		// if (this.direction == 'R') {
-		// 	for (int i = 0; i < next; i++) {
-		// 		this.x++;
-		// 		this.distanceTraveled++;
-		// 	}
-		// }
-		// else {
-		// 	for (int i = 0; i < next; i++) {
-		// 		this.x--;
-		// 		this.distanceTraveled++;
-		// 	}	
-		// }
-		// this.turn();
 	}
 
 	int nextTerm()
@@ -167,12 +193,28 @@ class Robot
 
 	void turn()
 	{
+
 		if (this.direction == 'L') {
 			this.direction = 'R';
 		}
 		else {
 			this.direction = 'L';
 		}
+
+		if (this.algorithm == "CG") {
+			this.lines[0].append(this.lastX);
+			this.lines[1].append(this.lastY - 25);
+			this.lines[2].append(this.x);
+			this.lines[3].append(this.lastY - 25);
+		}
+		else {
+			this.lines[0].append(this.lastX);
+			this.lines[1].append(this.lastY + 25);
+			this.lines[2].append(this.x);
+			this.lines[3].append(this.lastY + 25);
+		}
+		this.lastX = this.x;
+		this.lastY = this.y;
 	}
 
 	void reset()
@@ -188,6 +230,9 @@ class Robot
 		}
 		this.y = this.initY;
 
+		for (int i = 0; i <= 3; i++) {
+			this.lines[i] = new FloatList();
+		}
 		this.term = 0;
 		this.counter = 0;
 		this.distanceTraveled = 0;
