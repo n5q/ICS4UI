@@ -134,7 +134,7 @@ public void createGUI(){
   cgSpeedSlider = new GSlider(window1, 40, 180, 120, 35, 10.0);
   cgSpeedSlider.setShowValue(true);
   cgSpeedSlider.setShowLimits(true);
-  cgSpeedSlider.setLimits(0.5, 0.0, 1.0);
+  cgSpeedSlider.setLimits(1.0, 1.0, 100.0);
   cgSpeedSlider.setNumberFormat(G4P.DECIMAL, 2);
   cgSpeedSlider.setLocalColorScheme(GCScheme.CYAN_SCHEME);
   cgSpeedSlider.setOpaque(false);
@@ -142,8 +142,8 @@ public void createGUI(){
   daSpeedSlider = new GSlider(window1, 240, 180, 120, 35, 10.0);
   daSpeedSlider.setShowValue(true);
   daSpeedSlider.setShowLimits(true);
-  daSpeedSlider.setLimits(0.5, 0.0, 1.0);
-  daSpeedSlider.setNumberFormat(G4P.DECIMAL, 2);
+  daSpeedSlider.setLimits(1, 1, 100);
+  daSpeedSlider.setNumberFormat(G4P.INTEGER, 0);
   daSpeedSlider.setLocalColorScheme(GCScheme.GOLD_SCHEME);
   daSpeedSlider.setOpaque(false);
   daSpeedSlider.addEventHandler(this, "daSpeed");

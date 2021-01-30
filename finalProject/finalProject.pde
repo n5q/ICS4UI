@@ -18,10 +18,10 @@ void setup()
 	imageMode(CENTER);
 	createGUI();
 	bridgePos = 100;
-	cg_xStart = width/2;
-	cg_yStart = height-50;
 	da_xStart = width/2;
-	da_yStart = 50;
+	da_yStart = height-50;
+	cg_xStart = width/2;
+	cg_yStart = 50;
 	cg = new Robot(cg_xStart, cg_yStart, "CG");
 	da = new Robot(da_xStart, da_yStart, "DA");	
 	clean();
@@ -55,6 +55,7 @@ void pause()
 		playing = true;
 		startButton.setText("RESET");
 	}
+	redraw();
 }
 
 void reset()
@@ -94,7 +95,7 @@ class Robot
 		this.initY = initY;
 		this.algorithm = algo;
 		this.distanceTraveled = 0;
-		this.speed = 500;
+		this.speed = 1;
 		this.direction = 'L';
 		this.counter = 0;
 		this.term = 0;
@@ -141,7 +142,7 @@ class Robot
 	int nextTerm()
 	{
 		if (this.algorithm == "CG") {
-			// println(speed*this.term);
+			println(speed*this.term);
 			return speed*(this.term);
 		}
 		else if (this.algorithm == "DA") {
@@ -166,11 +167,14 @@ class Robot
 
 		if (this.algorithm == "CG") {
 			this.x = cgPosSlider.getValueI();
+			this.speed = cgSpeedSlider.getValueI();
 		}
 		else {
 			this.x = daPosSlider.getValueI();
+			this.speed = daSpeedSlider.getValueI();
 		}
 		this.y = this.initY;
+
 		this.term = 0;
 		this.counter = 0;
 		this.distanceTraveled = 0;
