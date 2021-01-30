@@ -1,3 +1,5 @@
+import g4p_controls.*;
+
 PImage robot;
 int bridgePos;
 int cg_xStart;
@@ -6,6 +8,7 @@ int da_xStart;
 int da_yStart;
 Robot cg;
 Robot da;
+boolean playing;
 
 void setup()
 {
@@ -13,23 +16,51 @@ void setup()
 	frameRate(60);
 	robot = loadImage("robot.png");
 	imageMode(CENTER);
+	createGUI();
 	bridgePos = 100;
 	cg_xStart = width/2;
 	cg_yStart = height-50;
 	da_xStart = width/2;
 	da_yStart = 50;
 	cg = new Robot(cg_xStart, cg_yStart, "CG");
-	da = new Robot(da_xStart, da_yStart, "DA");
+	da = new Robot(da_xStart, da_yStart, "DA");	
+	clean();
+	image(robot, cg.x, cg.y);
+	image(robot, da.x, da.y);
+	playing = false;
 }
 
 void draw()
 {
-	clean();
-	image(robot, cg.x, cg.y);
-	image(robot, da.x, da.y);
-	cg.move();
-	da.move();
+	if (playing) {
+		clean();
+		image(robot, cg.x, cg.y);
+		image(robot, da.x, da.y);
+		cg.move();
+		da.move();
+	}
+}
 
+void pause()
+{
+	if (playing) {
+		cg.reset();
+    	da.reset();
+		playing = false;
+		startButton.setText("START");
+	}
+	else {
+		cg.reset();
+		da.reset();
+		playing = true;
+		startButton.setText("RESET");
+	}
+}
+
+void reset()
+{
+	cg.reset();
+	da.reset();
 }
 
 void clean()
@@ -47,30 +78,35 @@ void clean()
 class Robot
 {
 	int x,y;
+	int initX, initY;
 	String algorithm;
 	int distanceTraveled;
 	int speed;
 	char direction;
-	int term;
 	int counter;
+	int term;
 
 	Robot(int initX, int initY, String algo)
 	{
 		this.x = initX;
 		this.y = initY;
+		this.initX = initX;
+		this.initY = initY;
 		this.algorithm = algo;
 		this.distanceTraveled = 0;
-		this.speed = 1;
+		this.speed = 500;
 		this.direction = 'L';
 		this.counter = 0;
+		this.term = 0;
 	}
 
 	void move()
 	{
-		if (this.counter == 0) {
+		if (this.counter <= 0) {
 			this.counter = this.nextTerm();
 			// this.y-=10;
 			this.turn();
+			this.term++;
 		}
 
 		else {
@@ -105,10 +141,12 @@ class Robot
 	int nextTerm()
 	{
 		if (this.algorithm == "CG") {
-			return speed*(frameCount);
+			// println(speed*this.term);
+			return speed*(this.term);
 		}
 		else if (this.algorithm == "DA") {
-			return int(speed*pow(2, frameCount-1));
+			println(speed*pow(2, this.term));
+			return int(speed*pow(2, this.term-1));
 		}
 		return 0;
 	}
@@ -123,4 +161,22 @@ class Robot
 		}
 	}
 
+	void reset()
+	{
+
+		if (this.algorithm == "CG") {
+			this.x = cgPosSlider.getValueI();
+		}
+		else {
+			this.x = daPosSlider.getValueI();
+		}
+		this.y = this.initY;
+		this.term = 0;
+		this.counter = 0;
+		this.distanceTraveled = 0;
+	}
+
 }
+
+
+
