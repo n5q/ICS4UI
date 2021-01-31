@@ -147,8 +147,50 @@ class Robot
 		}
 	}
 
+	// void move()
+	// {
+	// 	if (this.counter <= 0) {
+	// 		this.counter = this.nextTerm();
+	// 		if (this.algorithm == "CG") {
+	// 			this.y += 5;
+	// 		}
+	// 		else {
+	// 			this.y -= 5;
+	// 		}
+	// 		this.turn();
+	// 		this.term++;
+	// 	}
+
+	// 	else if (this.algorithm == "CG") {
+	// 		if (this.direction == 'R') {
+	// 			this.x += cgSpeedSlider.getValueF();
+	// 			this.distanceTraveled += cgSpeedSlider.getValueF();
+	// 			this.counter -= cgSpeedSlider.getValueF();
+	// 		}
+	// 		else {
+	// 			this.x -= cgSpeedSlider.getValueF();
+	// 			this.distanceTraveled += cgSpeedSlider.getValueF();
+	// 			this.counter -= cgSpeedSlider.getValueF();
+	// 		}
+	// 	}
+
+	// 	else {
+	// 		if (this.direction == 'R') {
+	// 			this.x += daSpeedSlider.getValueF();
+	// 			this.distanceTraveled += daSpeedSlider.getValueF();
+	// 			this.counter -= daSpeedSlider.getValueF();
+	// 		}
+	// 		else {
+	// 			this.x -= daSpeedSlider.getValueF();
+	// 			this.distanceTraveled += daSpeedSlider.getValueF();
+	// 			this.counter -= daSpeedSlider.getValueF();
+	// 		}			
+	// 	}
+	// }
+
 	void move()
 	{
+		float dx;
 		if (this.counter <= 0) {
 			this.counter = this.nextTerm();
 			if (this.algorithm == "CG") {
@@ -160,35 +202,37 @@ class Robot
 			this.turn();
 			this.term++;
 		}
-
-		else if (this.algorithm == "CG") {
-			if (this.direction == 'R') {
-				this.x += cgSpeedSlider.getValueF();
-				this.distanceTraveled += cgSpeedSlider.getValueF();
-				this.counter -= cgSpeedSlider.getValueF();
-			}
-			else {
-				this.x -= cgSpeedSlider.getValueF();
-				this.distanceTraveled += cgSpeedSlider.getValueF();
-				this.counter -= cgSpeedSlider.getValueF();
-			}
-		}
-
 		else {
-			if (this.direction == 'R') {
-				this.x += daSpeedSlider.getValueF();
-				this.distanceTraveled += daSpeedSlider.getValueF();
-				this.counter -= daSpeedSlider.getValueF();
+			if (this.algorithm == "CG") {
+				dx = cgSpeedSlider.getValueF();
 			}
 			else {
-				this.x -= daSpeedSlider.getValueF();
-				this.distanceTraveled += daSpeedSlider.getValueF();
-				this.counter -= daSpeedSlider.getValueF();
-			}			
+				dx = daSpeedSlider.getValueF();
+			}
+
+			if (this.counter - dx < 0) {
+				dx = this.counter;
+			}
+
+			if (this.direction == 'R') {
+				this.x += dx;
+				this.distanceTraveled += dx;
+				this.counter -= dx;
+			}
+			else {
+				this.x -= dx;
+				this.distanceTraveled += dx;
+				this.counter -= dx;
+			}
+
+
 		}
+
+
+
 	}
 
-	int nextTerm()
+	float nextTerm()
 	{
 		if (this.algorithm == "CG") {
 			println(step*this.term);
@@ -196,7 +240,7 @@ class Robot
 		}
 		else if (this.algorithm == "DA") {
 			println(step*pow(2, this.term));
-			return int(step*pow(2, this.term-1));
+			return step*pow(2, this.term-1);
 		}
 		return 0;
 	}
