@@ -96,7 +96,7 @@ public void createGUI(){
   cgPosSlider = new GSlider(window1, 40, 75, 120, 35, 10.0);
   cgPosSlider.setShowValue(true);
   cgPosSlider.setShowLimits(true);
-  cgPosSlider.setLimits(600, 0, 1200);
+  cgPosSlider.setLimits(600, 200, 1200);
   cgPosSlider.setNumberFormat(G4P.INTEGER, 0);
   cgPosSlider.setLocalColorScheme(GCScheme.PURPLE_SCHEME);
   cgPosSlider.setOpaque(false);
@@ -104,7 +104,7 @@ public void createGUI(){
   daPosSlider = new GSlider(window1, 240, 75, 120, 35, 10.0);
   daPosSlider.setShowValue(true);
   daPosSlider.setShowLimits(true);
-  daPosSlider.setLimits(600, 0, 1200);
+  daPosSlider.setLimits(600, 200, 1200);
   daPosSlider.setNumberFormat(G4P.INTEGER, 0);
   daPosSlider.setLocalColorScheme(GCScheme.RED_SCHEME);
   daPosSlider.setOpaque(false);
@@ -116,14 +116,14 @@ public void createGUI(){
   cgStepSlider = new GSlider(window1, 40, 125, 120, 35, 10.0);
   cgStepSlider.setShowValue(true);
   cgStepSlider.setShowLimits(true);
-  cgStepSlider.setLimits(1, 20, 256);
+  cgStepSlider.setLimits(1, 20, 100);
   cgStepSlider.setNumberFormat(G4P.INTEGER, 0);
   cgStepSlider.setOpaque(false);
   cgStepSlider.addEventHandler(this, "cgStep");
   daStepSlider = new GSlider(window1, 240, 125, 120, 35, 10.0);
   daStepSlider.setShowValue(true);
   daStepSlider.setShowLimits(true);
-  daStepSlider.setLimits(1, 20, 256);
+  daStepSlider.setLimits(1, 20, 100);
   daStepSlider.setNumberFormat(G4P.INTEGER, 0);
   daStepSlider.setLocalColorScheme(GCScheme.ORANGE_SCHEME);
   daStepSlider.setOpaque(false);
@@ -135,7 +135,7 @@ public void createGUI(){
   cgSpeedSlider = new GSlider(window1, 40, 180, 120, 35, 10.0);
   cgSpeedSlider.setShowValue(true);
   cgSpeedSlider.setShowLimits(true);
-  cgSpeedSlider.setLimits(1.0, 0.0, 10.0);
+  cgSpeedSlider.setLimits(1.0, 0.0, 20.0);
   cgSpeedSlider.setNumberFormat(G4P.DECIMAL, 2);
   cgSpeedSlider.setLocalColorScheme(GCScheme.CYAN_SCHEME);
   cgSpeedSlider.setOpaque(false);
@@ -143,8 +143,8 @@ public void createGUI(){
   daSpeedSlider = new GSlider(window1, 240, 180, 120, 35, 10.0);
   daSpeedSlider.setShowValue(true);
   daSpeedSlider.setShowLimits(true);
-  daSpeedSlider.setLimits(1.0, 0.0, 10.0);
-  daSpeedSlider.setNumberFormat(G4P.DECIMAL, 0);
+  daSpeedSlider.setLimits(1.0, 0.0, 20.0);
+  daSpeedSlider.setNumberFormat(G4P.DECIMAL, 2);
   daSpeedSlider.setLocalColorScheme(GCScheme.GOLD_SCHEME);
   daSpeedSlider.setOpaque(false);
   daSpeedSlider.addEventHandler(this, "daSpeed");

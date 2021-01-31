@@ -83,7 +83,6 @@ void clean()
 	fill(100,50,50);
 	stroke(100,50,50);
 	rect(bridgePos, (height/2) - 100, 100, 200);
-
 	stroke(255,0,0);
 	drawLines();
 }
@@ -125,6 +124,7 @@ class Robot
 	char direction;
 	float counter;
 	int term;
+	boolean crossing;
 	FloatList[] lines;
 
 	Robot(int initX, int initY, String algo)
@@ -141,6 +141,7 @@ class Robot
 		this.direction = 'L';
 		this.counter = 0;
 		this.term = 0;
+		this.crossing = false;
 		this.lines = new FloatList[4];
 		for (int i = 0; i <= 3; i++) {
 			this.lines[i] = new FloatList();
@@ -150,55 +151,64 @@ class Robot
 	void move()
 	{
 		float dx;
-		if (this.counter <= 0) {
-			this.counter = this.nextTerm();
-			if (this.algorithm == "CG") {
-				this.y += 5;
+
+		if (this.x >= bridgePos+75) {
+			if (this.counter <= 0) {
+				this.counter = this.nextTerm();
+				if (this.algorithm == "CG") {
+					this.y += 5;
+				}
+				else {
+					this.y -= 5;
+				}
+				this.turn();
+				this.term++;
 			}
 			else {
-				this.y -= 5;
+				if (this.algorithm == "CG") {
+					dx = cgSpeedSlider.getValueF();
+				}
+				else {
+					dx = daSpeedSlider.getValueF();
+				}
+
+				if (this.counter - dx < 0) {
+					dx = this.counter;
+				}
+
+				if (this.direction == 'R') {
+					this.x += dx;
+					this.distanceTraveled += dx;
+					this.counter -= dx;
+				}
+				else {
+					this.x -= dx;
+					this.distanceTraveled += dx;
+					this.counter -= dx;
+				}
 			}
-			this.turn();
-			this.term++;
 		}
 		else {
-			if (this.algorithm == "CG") {
-				dx = cgSpeedSlider.getValueF();
-			}
-			else {
-				dx = daSpeedSlider.getValueF();
+			if (!this.crossing) {
+				turn();
+				this.crossing = true;
 			}
 
-			if (this.counter - dx < 0) {
-				dx = this.counter;
+			if (this.y > (height/2)+100) {
+				this.y -= cgSpeedSlider.getValueF();
 			}
-
-			if (this.direction == 'R') {
-				this.x += dx;
-				this.distanceTraveled += dx;
-				this.counter -= dx;
+			else if (this.y < (height/2)-100) {
+				this.y += daSpeedSlider.getValueF();
 			}
-			else {
-				this.x -= dx;
-				this.distanceTraveled += dx;
-				this.counter -= dx;
-			}
-
-
 		}
-
-
-
 	}
 
 	float nextTerm()
 	{
 		if (this.algorithm == "CG") {
-			println(step*this.term);
 			return step*(this.term);
 		}
 		else if (this.algorithm == "DA") {
-			println(step*pow(2, this.term));
 			return step*pow(2, this.term-1);
 		}
 		return 0;
@@ -251,6 +261,3 @@ class Robot
 		this.distanceTraveled = 0;
 	}
 }
-
-
-
