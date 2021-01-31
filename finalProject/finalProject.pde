@@ -41,6 +41,13 @@ void draw()
 		cg.move();
 		da.move();
 		drawText();
+		drawLines();
+	}
+	else {
+		clean();
+		image(robot, cg.x, cg.y);
+		image(robot, da.x, da.y);
+		drawText();		
 	}
 }
 
@@ -70,6 +77,10 @@ void pause()
 
 void reset()
 {
+	for (int i = 0; i <= 3; i++) {
+		cg.lines[i] = new FloatList();
+		da.lines[i] = new FloatList();
+	}
 	cg.reset();
 	da.reset();
 }
@@ -84,7 +95,6 @@ void clean()
 	stroke(100,50,50);
 	rect(bridgePos, (height/2) - 100, 100, 200);
 	stroke(255,0,0);
-	drawLines();
 }
 
 void clean(boolean lines)
@@ -98,8 +108,9 @@ void clean(boolean lines)
 	rect(bridgePos, (height/2) - 100, 100, 200);
 
 	stroke(255,0,0);
-	if (lines) {
-		drawLines();
+	for (int i = 0; i <= 3; i++) {
+		cg.lines[i] = new FloatList();
+		da.lines[i] = new FloatList();
 	}
 }
 
