@@ -28,6 +28,8 @@ void setup()
 	image(robot, cg.x, cg.y);
 	image(robot, da.x, da.y);
 	playing = false;
+	PFont font = createFont("Arial", 20);
+	textFont(font);
 }
 
 void draw()
@@ -38,7 +40,15 @@ void draw()
 		image(robot, da.x, da.y);
 		cg.move();
 		da.move();
+		drawText();
 	}
+}
+
+void drawText()
+{
+	fill(0);
+	text("Distance Traveled: " + str(cg.distanceTraveled) + "px", 25, 35);
+	text("Distance Traveled: " + str(da.distanceTraveled) + "px", 25, height-25);
 }
 
 void pause()
