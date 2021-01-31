@@ -116,14 +116,14 @@ public void createGUI(){
   cgStepSlider = new GSlider(window1, 40, 125, 120, 35, 10.0);
   cgStepSlider.setShowValue(true);
   cgStepSlider.setShowLimits(true);
-  cgStepSlider.setLimits(1, 1, 256);
+  cgStepSlider.setLimits(1, 20, 256);
   cgStepSlider.setNumberFormat(G4P.INTEGER, 0);
   cgStepSlider.setOpaque(false);
   cgStepSlider.addEventHandler(this, "cgStep");
   daStepSlider = new GSlider(window1, 240, 125, 120, 35, 10.0);
   daStepSlider.setShowValue(true);
   daStepSlider.setShowLimits(true);
-  daStepSlider.setLimits(1, 1, 256);
+  daStepSlider.setLimits(1, 20, 256);
   daStepSlider.setNumberFormat(G4P.INTEGER, 0);
   daStepSlider.setLocalColorScheme(GCScheme.ORANGE_SCHEME);
   daStepSlider.setOpaque(false);

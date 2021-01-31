@@ -147,47 +147,6 @@ class Robot
 		}
 	}
 
-	// void move()
-	// {
-	// 	if (this.counter <= 0) {
-	// 		this.counter = this.nextTerm();
-	// 		if (this.algorithm == "CG") {
-	// 			this.y += 5;
-	// 		}
-	// 		else {
-	// 			this.y -= 5;
-	// 		}
-	// 		this.turn();
-	// 		this.term++;
-	// 	}
-
-	// 	else if (this.algorithm == "CG") {
-	// 		if (this.direction == 'R') {
-	// 			this.x += cgSpeedSlider.getValueF();
-	// 			this.distanceTraveled += cgSpeedSlider.getValueF();
-	// 			this.counter -= cgSpeedSlider.getValueF();
-	// 		}
-	// 		else {
-	// 			this.x -= cgSpeedSlider.getValueF();
-	// 			this.distanceTraveled += cgSpeedSlider.getValueF();
-	// 			this.counter -= cgSpeedSlider.getValueF();
-	// 		}
-	// 	}
-
-	// 	else {
-	// 		if (this.direction == 'R') {
-	// 			this.x += daSpeedSlider.getValueF();
-	// 			this.distanceTraveled += daSpeedSlider.getValueF();
-	// 			this.counter -= daSpeedSlider.getValueF();
-	// 		}
-	// 		else {
-	// 			this.x -= daSpeedSlider.getValueF();
-	// 			this.distanceTraveled += daSpeedSlider.getValueF();
-	// 			this.counter -= daSpeedSlider.getValueF();
-	// 		}			
-	// 	}
-	// }
-
 	void move()
 	{
 		float dx;
