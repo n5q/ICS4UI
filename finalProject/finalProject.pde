@@ -200,10 +200,8 @@ class Robot
 			}
 		}
 		else {
-			if (!this.crossing) {
-				turn();
-				this.crossing = true;
-			}
+
+			this.addLine();
 
 			if (this.y > (height/2)+100) {
 				this.y -= cgSpeedSlider.getValueF();
@@ -234,7 +232,37 @@ class Robot
 		else {
 			this.direction = 'L';
 		}
+		addLine();
+		this.lastX = this.x;
+		this.lastY = this.y;
+	}
 
+	void reset()
+	{
+
+		if (this.algorithm == "CG") {
+			this.x = cgPosSlider.getValueF();
+			this.lastX = cgPosSlider.getValueF();
+			this.step = cgStepSlider.getValueI();
+		}
+		else {
+			this.x = daPosSlider.getValueF();
+			this.lastX = daPosSlider.getValueF();
+			this.step = daStepSlider.getValueI();
+		}
+		this.y = this.initY;
+		this.lastY = this.initY;
+
+		for (int i = 0; i <= 3; i++) {
+			this.lines[i] = new FloatList();
+		}
+		this.term = 0;
+		this.counter = 0;
+		this.distanceTraveled = 0;
+	}
+
+	void addLine()
+	{
 		if (this.algorithm == "CG") {
 			this.lines[0].append(this.lastX);
 			this.lines[1].append(this.lastY - 25);
@@ -247,28 +275,5 @@ class Robot
 			this.lines[2].append(this.x);
 			this.lines[3].append(this.lastY + 25);
 		}
-		this.lastX = this.x;
-		this.lastY = this.y;
-	}
-
-	void reset()
-	{
-
-		if (this.algorithm == "CG") {
-			this.x = cgPosSlider.getValueI();
-			this.step = cgStepSlider.getValueI();
-		}
-		else {
-			this.x = daPosSlider.getValueI();
-			this.step = daStepSlider.getValueI();
-		}
-		this.y = this.initY;
-
-		for (int i = 0; i <= 3; i++) {
-			this.lines[i] = new FloatList();
-		}
-		this.term = 0;
-		this.counter = 0;
-		this.distanceTraveled = 0;
 	}
 }
