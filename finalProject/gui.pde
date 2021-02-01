@@ -18,47 +18,55 @@ synchronized public void win_draw1(PApplet appc, GWinData data) { //_CODE_:windo
   appc.background(230);
 } //_CODE_:window1:877462:
 
-public void start(GButton source, GEvent event) { //_CODE_:startButton:843742:
+void stop()
+{ 
   reset();
-  clean(false);
+  clean();
   pause();
+}
+
+public void start(GButton source, GEvent event) { //_CODE_:startButton:843742:
+  stop();
 } //_CODE_:startButton:843742:
 
 public void cgPos(GSlider source, GEvent event) { //_CODE_:cgPosSlider:223825:
   if (event == GEvent.PRESSED && playing) {
-    pause();
+    stop();
   }
 } //_CODE_:cgPosSlider:223825:
 
 public void daPos(GSlider source, GEvent event) { //_CODE_:daPosSlider:956507:
   if (event == GEvent.PRESSED && playing) {
-    pause();
+    stop();
   }
 } //_CODE_:daPosSlider:956507:
 
 public void cgStep(GSlider source, GEvent event) { //_CODE_:cgStepSlider:973710:
   if (event == GEvent.PRESSED && playing) {
-    pause();
+    stop();
   }
 } //_CODE_:cgStepSlider:973710:
 
 public void daStep(GSlider source, GEvent event) { //_CODE_:daStepSlider:355466:
   if (event == GEvent.PRESSED && playing) {
-    pause();
+    stop();
   }
 } //_CODE_:daStepSlider:355466:
 
 public void cgSpeed(GSlider source, GEvent event) { //_CODE_:cgSpeedSlider:280514:
   if (event == GEvent.PRESSED && playing) {
-    pause();
+    stop();
   }
 } //_CODE_:cgSpeedSlider:280514:
 
 public void daSpeed(GSlider source, GEvent event) { //_CODE_:daSpeedSlider:758925:
   if (event == GEvent.PRESSED && playing) {
-    pause();
+    stop();
   }
 } //_CODE_:daSpeedSlider:758925:
+
+public void lineCheck(GCheckbox source, GEvent event) { //_CODE_:lines:281742:
+} //_CODE_:lines:281742:
 
 
 
@@ -69,11 +77,11 @@ public void createGUI(){
   G4P.setGlobalColorScheme(GCScheme.BLUE_SCHEME);
   G4P.setMouseOverEnabled(false);
   surface.setTitle("Sketch Window");
-  window1 = GWindow.getWindow(this, "Window title", 0, 0, 400, 300, JAVA2D);
+  window1 = GWindow.getWindow(this, "Window title", 0, 0, 400, 350, JAVA2D);
   window1.noLoop();
   window1.setActionOnClose(G4P.KEEP_OPEN);
   window1.addDrawHandler(this, "win_draw1");
-  startButton = new GButton(window1, 137, 225, 125, 50);
+  startButton = new GButton(window1, 137, 275, 125, 50);
   startButton.setText("START");
   startButton.setLocalColorScheme(GCScheme.GREEN_SCHEME);
   startButton.addEventHandler(this, "start");
@@ -104,7 +112,7 @@ public void createGUI(){
   daPosSlider = new GSlider(window1, 240, 75, 120, 35, 10.0);
   daPosSlider.setShowValue(true);
   daPosSlider.setShowLimits(true);
-  daPosSlider.setLimits(600, 200, 1200);
+  daPosSlider.setLimits(600, 0, 1200);
   daPosSlider.setNumberFormat(G4P.INTEGER, 0);
   daPosSlider.setLocalColorScheme(GCScheme.RED_SCHEME);
   daPosSlider.setOpaque(false);
@@ -148,6 +156,13 @@ public void createGUI(){
   daSpeedSlider.setLocalColorScheme(GCScheme.GOLD_SCHEME);
   daSpeedSlider.setOpaque(false);
   daSpeedSlider.addEventHandler(this, "daSpeed");
+  lines = new GCheckbox(window1, 150, 235, 100, 20);
+  lines.setIconAlign(GAlign.LEFT, GAlign.MIDDLE);
+  lines.setText("Display lines");
+  lines.setLocalColorScheme(GCScheme.RED_SCHEME);
+  lines.setOpaque(false);
+  lines.addEventHandler(this, "lineCheck");
+  lines.setSelected(true);
   window1.loop();
 }
 
@@ -167,3 +182,4 @@ GSlider daStepSlider;
 GLabel label6; 
 GSlider cgSpeedSlider; 
 GSlider daSpeedSlider; 
+GCheckbox lines; 

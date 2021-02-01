@@ -1,5 +1,6 @@
 import g4p_controls.*;
 
+// DECLARE GLOBAL VARIABLES
 PImage robot;
 int bridgePos;
 int cg_xStart;
@@ -18,15 +19,16 @@ void setup()
 	imageMode(CENTER);
 	createGUI();
 	bridgePos = 100;
-	da_xStart = width/2;
+	// INITIAL STARTING POSITIONS (OVERRIDED BY SLIDER VALUES LATER)
 	da_yStart = height-50;
-	cg_xStart = width/2;
 	cg_yStart = 50;
-	cg = new Robot(cg_xStart, cg_yStart, "CG");
-	da = new Robot(da_xStart, da_yStart, "DA");	
+	// CREATE ROBOT OBJECTS
+	cg = new Robot(cgPosSlider.getValueI(), cg_yStart, "CG");
+	da = new Robot(daPosSlider.getValueI(), da_yStart, "DA");	
 	clean();
 	image(robot, cg.x, cg.y);
 	image(robot, da.x, da.y);
+	// START OUT PAUSED
 	playing = false;
 	PFont font = createFont("Arial", 20);
 	textFont(font);
@@ -34,15 +36,25 @@ void setup()
 
 void draw()
 {
+	// MAIN LOOP
 	if (playing) {
+		// REMOVE OLD ROBOTS AND TEXT, REDRAW WITH UPDATED POSITIONS AND VALUES
 		clean();
+		// DRAW ROBOTS
 		image(robot, cg.x, cg.y);
 		image(robot, da.x, da.y);
+		// MOVE ROBOTS (FOR NEXT FRAME)
 		cg.move();
 		da.move();
+		// DRAW TEXT
 		drawText();
-		drawLines();
+		// ONLY DRAW LINES IF BOX IS CHECKED
+		if (lines.isSelected()) {
+			drawLines();
+		}
 	}
+
+	// RESET POSITIONS
 	else {
 		clean();
 		image(robot, cg.x, cg.y);
@@ -54,39 +66,40 @@ void draw()
 void drawText()
 {
 	fill(0);
+	// DRAW TEXT WITH EACH ROBOT'S TOTAL DISTANCE TRAVELED
 	text("Distance Traveled: " + str(cg.distanceTraveled) + "px", 25, 35);
 	text("Distance Traveled: " + str(da.distanceTraveled) + "px", 25, height-25);
 }
 
 void pause()
 {
+	// PAUSE
 	if (playing) {
-		cg.reset();
-    	da.reset();
+		reset();
 		playing = false;
 		startButton.setText("START");
 	}
+
+	// UNPAUSE
 	else {
-		cg.reset();
-		da.reset();
+		reset();
 		playing = true;
 		startButton.setText("RESET");
 	}
+
 	redraw();
 }
 
 void reset()
 {
-	for (int i = 0; i <= 3; i++) {
-		cg.lines[i] = new FloatList();
-		da.lines[i] = new FloatList();
-	}
+	// RESET POSITIONS AND VALUES OF BOTH ROBOTS
 	cg.reset();
 	da.reset();
 }
 
 void clean()
 {
+	// REDRAW BACKGROUND, CLEAR ROBOTS
 	background(60,175,75);
 	stroke(50,150,200);
 	fill(50,150,200);
@@ -94,186 +107,41 @@ void clean()
 	fill(100,50,50);
 	stroke(100,50,50);
 	rect(bridgePos, (height/2) - 100, 100, 200);
+	stroke(200,100,100);
+	// BRIDGE LINES
+	line(bridgePos, (height/2) - 80, bridgePos+100, (height/2) - 80);
+	line(bridgePos, (height/2) - 60, bridgePos+100, (height/2) - 60);
+	line(bridgePos, (height/2) - 40, bridgePos+100, (height/2) - 40);
+	line(bridgePos, (height/2) - 20, bridgePos+100, (height/2) - 20);
+	line(bridgePos, (height/2), bridgePos+100, (height/2));
+	line(bridgePos, (height/2) + 20, bridgePos+100, (height/2) + 20);
+	line(bridgePos, (height/2) + 40, bridgePos+100, (height/2) + 40);
+	line(bridgePos, (height/2) + 60, bridgePos+100, (height/2) + 60);
+	line(bridgePos, (height/2) + 80, bridgePos+100, (height/2) + 80);
 	stroke(255,0,0);
-}
-
-void clean(boolean lines)
-{
-	background(60,175,75);
-	stroke(50,150,200);
-	fill(50,150,200);
-	rect(0,(height/2) - 60, width, 120);
-	fill(100,50,50);
-	stroke(100,50,50);
-	rect(bridgePos, (height/2) - 100, 100, 200);
-
-	stroke(255,0,0);
-	for (int i = 0; i <= 3; i++) {
-		cg.lines[i] = new FloatList();
-		da.lines[i] = new FloatList();
-	}
 }
 
 void drawLines()
 {
+
+	// DRAW LINES FOR BOTH ROBOTS
+	// CONSTANT GROWTH
 	for (int i = 0; i < cg.lines[0].size(); i++) {
-		line(cg.lines[0].get(i), cg.lines[1].get(i), cg.lines[2].get(i), cg.lines[3].get(i));
+		line(
+			 cg.lines[0].get(i),
+			 cg.lines[1].get(i),
+			 cg.lines[2].get(i),
+			 cg.lines[3].get(i)
+			);
 	}
+	// DOUBLING ALGORITHM
 	for (int i = 0; i < da.lines[0].size(); i++) {
-		line(da.lines[0].get(i), da.lines[1].get(i), da.lines[2].get(i), da.lines[3].get(i));
+		line(
+			 da.lines[0].get(i),
+			 da.lines[1].get(i),
+			 da.lines[2].get(i),
+			 da.lines[3].get(i)
+			);
 	}
 }
 
-class Robot
-{
-	float x,y;
-	float initX, initY;
-	float lastX, lastY;
-	String algorithm;
-	float distanceTraveled;
-	int step;
-	char direction;
-	float counter;
-	int term;
-	boolean crossing;
-	FloatList[] lines;
-
-	Robot(int initX, int initY, String algo)
-	{
-		this.x = initX;
-		this.y = initY;
-		this.initX = initX;
-		this.initY = initY;
-		this.lastX = initX;
-		this.lastY = initY;
-		this.algorithm = algo;
-		this.distanceTraveled = 0;
-		this.step = 1;
-		this.direction = 'L';
-		this.counter = 0;
-		this.term = 0;
-		this.crossing = false;
-		this.lines = new FloatList[4];
-		for (int i = 0; i <= 3; i++) {
-			this.lines[i] = new FloatList();
-		}
-	}
-
-	void move()
-	{
-		float dx;
-
-		if (this.x >= bridgePos+75) {
-			if (this.counter <= 0) {
-				this.counter = this.nextTerm();
-				if (this.algorithm == "CG") {
-					this.y += 5;
-				}
-				else {
-					this.y -= 5;
-				}
-				this.turn();
-				this.term++;
-			}
-			else {
-				if (this.algorithm == "CG") {
-					dx = cgSpeedSlider.getValueF();
-				}
-				else {
-					dx = daSpeedSlider.getValueF();
-				}
-
-				if (this.counter - dx < 0) {
-					dx = this.counter;
-				}
-
-				if (this.direction == 'R') {
-					this.x += dx;
-					this.distanceTraveled += dx;
-					this.counter -= dx;
-				}
-				else {
-					this.x -= dx;
-					this.distanceTraveled += dx;
-					this.counter -= dx;
-				}
-			}
-		}
-		else {
-
-			this.addLine();
-
-			if (this.y > (height/2)+100) {
-				this.y -= cgSpeedSlider.getValueF();
-			}
-			else if (this.y < (height/2)-100) {
-				this.y += daSpeedSlider.getValueF();
-			}
-		}
-	}
-
-	float nextTerm()
-	{
-		if (this.algorithm == "CG") {
-			return step*(this.term);
-		}
-		else if (this.algorithm == "DA") {
-			return step*pow(2, this.term-1);
-		}
-		return 0;
-	}
-
-	void turn()
-	{
-
-		if (this.direction == 'L') {
-			this.direction = 'R';
-		}
-		else {
-			this.direction = 'L';
-		}
-		addLine();
-		this.lastX = this.x;
-		this.lastY = this.y;
-	}
-
-	void reset()
-	{
-
-		if (this.algorithm == "CG") {
-			this.x = cgPosSlider.getValueF();
-			this.lastX = cgPosSlider.getValueF();
-			this.step = cgStepSlider.getValueI();
-		}
-		else {
-			this.x = daPosSlider.getValueF();
-			this.lastX = daPosSlider.getValueF();
-			this.step = daStepSlider.getValueI();
-		}
-		this.y = this.initY;
-		this.lastY = this.initY;
-
-		for (int i = 0; i <= 3; i++) {
-			this.lines[i] = new FloatList();
-		}
-		this.term = 0;
-		this.counter = 0;
-		this.distanceTraveled = 0;
-	}
-
-	void addLine()
-	{
-		if (this.algorithm == "CG") {
-			this.lines[0].append(this.lastX);
-			this.lines[1].append(this.lastY - 25);
-			this.lines[2].append(this.x);
-			this.lines[3].append(this.lastY - 25);
-		}
-		else {
-			this.lines[0].append(this.lastX);
-			this.lines[1].append(this.lastY + 25);
-			this.lines[2].append(this.x);
-			this.lines[3].append(this.lastY + 25);
-		}
-	}
-}
